@@ -16,6 +16,8 @@ state_t state;
 
 always_ff @(posedge clk) begin
     if (reset) begin
+        state <= IDLE;
+        rx_out <= 0;
         ready <= 0;
         rx_sync_temp <= 1'b1;
         rx_sync <= 1'b1;
