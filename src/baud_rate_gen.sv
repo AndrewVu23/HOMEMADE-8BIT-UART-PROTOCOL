@@ -3,7 +3,7 @@ module baud_rate_gen(
     output logic tx_en, rx_en
 );
 localparam cnt_bits = 434;
-localparam samp_rate = 16;
+localparam sample_rate = 16;
 
 logic [9:0] tx_counter;
 logic [5:0] rx_counter;
@@ -17,7 +17,7 @@ always_ff @(posedge clk) begin
         tx_en <= 0;
         tx_counter <= tx_counter + 1'b1;
     end
-    if (rx_counter == cnt_bits/samp_rate - 1) begin
+    if (rx_counter == cnt_bits/sample_rate - 1) begin
         rx_counter <= 0;
         rx_en <= 1'b1;
     end
