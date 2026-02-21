@@ -73,6 +73,8 @@ module RX_tb;
     endtask
 
     initial begin
+        $dumpfile("sim.vcd");
+        $dumpvars(0, RX_tb);
         reset = 1; rx_in = 1; ready_clr = 0; write_en = 0; tx_in = 0;  #100
         reset = 0; #100
 
