@@ -2,8 +2,6 @@
 
 A 8-bit Universal Asynchronous Receiver-Transmitter (UART) implementation in SystemVerilog, intended for serial communication between FPGA/ASIC and peripherals (e.g., PCs, microcontrollers, sensors). It is designed for a 50 MHz clock and 115,200 baud, with no parity. The RX path uses a 2-stage flip-flop synchronizer for metastability-safe reception.
 
----
-
 ## How UART Works
 
 UART (Universal Asynchronous Receiver-Transmitter) is a serial protocol that sends data one bit at a time over a pair of lines (TX and RX). It is asynchronous — there is no shared clock. Both sides agree on a baud rate in advance and use start/stop bits to frame each byte, so each frame can be decoded without a clock line.
@@ -24,9 +22,6 @@ UART sends data one bit at a time. The line is idle high. A frame begins with a 
 | 0   | START | 0      | Start of frame, high → low   |
 | 1–8 | DATA  | D[0:7] | 8 data bits, LSB first       |
 | 9   | STOP  | 1      | End of frame, line goes high |
-
-
----
 
 ## Baud Rate, Oversampling, and Clock Configuration
 
@@ -67,8 +62,6 @@ Sample that Reads the Data (Center Sample) = Oversampling Rate / 2
                                            = 8th Sample
 ```
 
----
-
 ## Module Overview
 
 
@@ -78,9 +71,6 @@ Sample that Reads the Data (Center Sample) = Oversampling Rate / 2
 | `baud_rate_gen` | `src/baud_rate_gen.sv` | Baud-rate generator |
 | `TX`            | `src/TX.sv`            | Transmitter         |
 | `RX`            | `src/RX.sv`            | Receiver            |
-
-
----
 
 ## Module Descriptions
 
@@ -100,8 +90,6 @@ Outputs: `tx_en`, `rx_en`
 
 - `tx_en` — Pulses once every `BIT_CYCLE` clocks (bit-rate clock for TX)
 - `rx_en` — Pulses every `BIT_CYCLE / SAMPLE_RATE` clocks (16× oversampling for RX)
-
----
 
 ### `TX` — Transmitter
 
@@ -130,8 +118,6 @@ Design notes:
 - Data is sampled at the start of the transaction and transmitted LSB first
 - `busy` is high whenever the state machine is not in IDLE
 
----
-
 ### `RX` — Receiver
 
 Receives serial UART frames and reconstructs 8-bit data. Uses a 2-stage flip-flop synchronizer on the incoming serial line for metastability-safe operation.
@@ -139,7 +125,6 @@ Receives serial UART frames and reconstructs 8-bit data. Uses a 2-stage flip-flo
 #### 2-Stage Flip-Flop Synchronizer
 
 The `rx_in` signal is asynchronous to the system clock, so a single flip-flop could enter metastability. The RX uses two consecutive flip-flops:
-
 
 
 - First FF: Captures the asynchronous input; may become metastable
@@ -172,13 +157,9 @@ Design notes:
 
 - `ready_clr` is like a read receipt that acknowledges that you have viewed the notification.` 
 
----
-
 ### `UART` — Top-Level
 
 Connects the baud generator, TX, and RX into a single interface.
-
----
 
 ## How to Run the Simulation
 
