@@ -1,9 +1,9 @@
-module TX(
+module TX #(parameter N = 8)(
     input logic clk, reset, tx_en, write_en,
-    input logic [7:0] tx_in,
+    input logic [N-1:0] tx_in,
     output logic tx_out, busy
 );
-logic [7:0] data_temp;
+logic [N-1:0] data_temp;
 logic [3:0] index;
 
 typedef enum logic [1:0] {IDLE, START, DATA, STOP} state_t;
@@ -34,7 +34,7 @@ always_ff @(posedge clk) begin
             DATA: begin
                 tx_out <= data_temp[index];
                 if (tx_en) begin
-                    if (index == 7) state <= STOP;
+                    if (index == N-1) state <= STOP;
                     else index <= index + 1'b1;
                 end
             end

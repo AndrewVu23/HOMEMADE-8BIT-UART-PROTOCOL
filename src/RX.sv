@@ -1,12 +1,11 @@
-module RX(
+module RX #(parameter N = 8, parameter SAMPLE_RATE = 16)
+(
     input logic clk, reset, ready_clr, rx_en,
     input logic rx_in,
     output logic ready,
-    output logic [7:0] rx_out
+    output logic [N-1:0] rx_out
 );
-localparam sample_rate = 16;
-
-logic [7:0] data_temp;
+logic [N-1:0] data_temp;
 logic [3:0] sample_counter;
 logic [3:0] index;
 logic rx_sync_temp, rx_sync;
@@ -34,11 +33,11 @@ always_ff @(posedge clk) begin
             end
             START: begin
                 if (rx_en) begin           
-                    if (sample_counter == sample_rate/2 - 1) begin
+                    if (sample_counter == SAMPLE_RATE/2 - 1) begin
                         if (rx_sync) state <= IDLE;
                         else sample_counter <= sample_counter + 1;
                     end
-                    else if (sample_counter == sample_rate - 1) begin
+                    else if (sample_counter == SAMPLE_RATE - 1) begin
                         index <= 0;
                         sample_counter <= 0;
                         state <= DATA;
@@ -48,13 +47,13 @@ always_ff @(posedge clk) begin
             end
             DATA: begin
                 if (rx_en) begin          
-                    if (sample_counter == sample_rate/2 - 1) begin 
+                    if (sample_counter == SAMPLE_RATE/2 - 1) begin 
                         data_temp[index] <= rx_sync;
                         sample_counter <= sample_counter + 1;
                     end
-                    else if (sample_counter == sample_rate - 1) begin 
+                    else if (sample_counter == SAMPLE_RATE - 1) begin 
                         sample_counter <= 0;
-                        if (index == 7) state <= STOP;
+                        if (index == N-1) state <= STOP;
                         else index <= index + 1;
                     end
                     else sample_counter <= sample_counter + 1;
@@ -62,7 +61,7 @@ always_ff @(posedge clk) begin
             end
             STOP: begin
                 if (rx_en) begin
-                    if (sample_counter == sample_rate/2 - 1) begin
+                    if (sample_counter == SAMPLE_RATE/2 - 1) begin
                         if (rx_sync) begin
                             ready <= 1'b1;
                             rx_out <= data_temp;
@@ -70,7 +69,7 @@ always_ff @(posedge clk) begin
                         end
                         else sample_counter <= sample_counter + 1;
                     end
-                    else if (sample_counter == sample_rate - 1) begin
+                    else if (sample_counter == SAMPLE_RATE - 1) begin
                         sample_counter <= 0;
                         state <= IDLE;
                     end

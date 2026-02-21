@@ -1,13 +1,15 @@
-module UART(
+module UART #(parameter N = 8)
+(
     input  logic clk, reset, write_en, ready_clr, rx_in,              
-    input  logic [7:0] tx_in,
+    input  logic [N-1:0] tx_in,
     output logic tx_out, ready, busy, 
-    output logic [7:0] rx_out       
+    output logic [N-1:0] rx_out       
 );
     logic tx_en; 
     logic rx_en;
 
     baud_rate_gen baud_rate_gen_module(
+        .reset(reset),
         .clk(clk),
         .tx_en(tx_en), 
         .rx_en(rx_en)  

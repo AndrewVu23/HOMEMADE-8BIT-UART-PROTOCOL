@@ -1,29 +1,35 @@
-module baud_rate_gen(
-    input logic clk,
+module baud_rate_gen #(parameter BIT_CYCLE = 434, parameter SAMPLE_RATE = 16)
+(
+    input logic clk, reset,
     output logic tx_en, rx_en
 );
-localparam cnt_bits = 434;
-localparam sample_rate = 16;
-
 logic [9:0] tx_counter;
 logic [5:0] rx_counter;
 
 always_ff @(posedge clk) begin
-    if (tx_counter == cnt_bits - 1) begin
+    if (reset) begin
         tx_counter <= 0;
-        tx_en <= 1'b1;
-    end
-    else begin
-        tx_en <= 0;
-        tx_counter <= tx_counter + 1'b1;
-    end
-    if (rx_counter == cnt_bits/sample_rate - 1) begin
         rx_counter <= 0;
-        rx_en <= 1'b1;
+        tx_en <= 0;
+        rx_en <= 0;
     end
     else begin
-        rx_en <= 0;
-        rx_counter <= rx_counter + 1'b1;
+        if (tx_counter == BIT_CYCLE - 1) begin
+            tx_counter <= 0;
+            tx_en <= 1'b1;
+        end
+        else begin
+            tx_en <= 0;
+            tx_counter <= tx_counter + 1'b1;
+        end
+        if (rx_counter == BIT_CYCLE/SAMPLE_RATE - 1) begin
+            rx_counter <= 0;
+            rx_en <= 1'b1;
+        end
+        else begin
+            rx_en <= 0;
+            rx_counter <= rx_counter + 1'b1;
+        end
     end
 end
 endmodule
