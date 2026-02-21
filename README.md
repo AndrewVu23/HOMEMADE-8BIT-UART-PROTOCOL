@@ -93,8 +93,7 @@ Outputs: `tx_en`, `rx_en`
 
 ### `TX` — Transmitter
 
-State machine:
-
+<img width="700" height="1100" src="https://github.com/user-attachments/assets/12a63e69-462d-40ea-8ad3-6e379cdba9ef" />
 
 | Input        | Description                                                                          |
 | ------------ | ------------------------------------------------------------------------------------ |
@@ -130,10 +129,11 @@ The `rx_in` signal is asynchronous to the system clock, so a single flip-flop co
 - First FF: Captures the asynchronous input; may become metastable
 - Second FF: Resamples the output of the first FF, greatly reducing the chance that a metastable value propagates into the RX logic
 
+<img width="300" height="400" alt="image" src="https://github.com/user-attachments/assets/bb0d3d1e-5847-450c-8877-b53dd257d37f" />
+
 All RX state-machine logic uses `rx_sync`, never `rx_in` directly, so the design is safe against metastability.
 
-#### State Machine & Sampling
-
+<img width="700" height="1100" src="https://github.com/user-attachments/assets/19c2a58a-a541-41f3-b0fb-80c18dd67845" />
 
 | Input       | Description                                                                          |
 | ----------- | ------------------------------------------------------------------------------------ |
