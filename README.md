@@ -4,7 +4,7 @@ A 8-bit Universal Asynchronous Receiver-Transmitter (UART) implementation in Sys
 
 ## How UART Works
 
-UART (Universal Asynchronous Receiver-Transmitter) is a serial protocol that sends data one bit at a time over a pair of lines (TX and RX). It is asynchronous — there is no shared clock. Both sides agree on a baud rate in advance and use start/stop bits to frame each byte, so each frame can be decoded without a clock line.
+UART (Universal Asynchronous Receiver-Transmitter) is a serial protocol that sends data one bit at a time over a pair of lines (TX and RX). It is asynchronous. Both sides agree on a baud rate in advance and use start/stop bits to frame each byte, so each frame can be decoded without a clock line.
 
 Pros: simple, few wires (2 for full duplex), widely supported, easy to implement. Cons: slower than clocked serial buses, point-to-point only, both sides must use the same baud rate.
 
