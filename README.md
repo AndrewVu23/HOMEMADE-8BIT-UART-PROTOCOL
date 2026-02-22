@@ -125,11 +125,10 @@ Receives serial UART frames and reconstructs 8-bit data. Uses a 2-stage flip-flo
 
 The `rx_in` signal is asynchronous to the system clock, so a single flip-flop could enter metastability. The RX uses two consecutive flip-flops:
 
+<img width="300" height="400" alt="image" src="https://github.com/user-attachments/assets/bb0d3d1e-5847-450c-8877-b53dd257d37f" />
 
 - First FF: Captures the asynchronous input; may become metastable
 - Second FF: Resamples the output of the first FF, greatly reducing the chance that a metastable value propagates into the RX logic
-
-<img width="300" height="400" alt="image" src="https://github.com/user-attachments/assets/bb0d3d1e-5847-450c-8877-b53dd257d37f" />
 
 All RX state-machine logic uses `rx_sync`, never `rx_in` directly, so the design is safe against metastability.
 
